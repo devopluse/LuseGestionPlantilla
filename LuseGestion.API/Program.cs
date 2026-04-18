@@ -33,6 +33,9 @@ builder.Services.AddSwaggerGen(options =>
             Email = "contact@lusegestion.com"
         }
     });
+
+    // Habilitar anotaciones de Swagger
+    options.EnableAnnotations();
 });
 
 // Add FluentValidation
@@ -48,10 +51,10 @@ if (string.IsNullOrEmpty(connectionString))
 builder.Services.AddSingleton<IMySqlConnectionFactory>(new MySqlConnectionFactory(connectionString));
 
 // Register repositories
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 // Register application services
-builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 
 // Add CORS
 builder.Services.AddCors(options =>
