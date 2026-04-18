@@ -1,6 +1,7 @@
 using LuseGestion.Domain.Entities;
 using LuseGestion.Domain.Interfaces;
 using LuseGestion.Domain.Primitives;
+using System.Text.RegularExpressions;
 
 namespace LuseGestion.Application.Services;
 
@@ -228,10 +229,21 @@ public class UsuarioService : IUsuarioService
 
     private static bool IsValidEmail(string email)
     {
+        if (string.IsNullOrWhiteSpace(email))
+            return false;
+
         try
         {
+            // Patrón regex robusto para validar emails
+            // Soporta dominios de múltiples niveles como .com.ar, .co.uk, etc.
+            var emailPattern = @"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$";
+
+            if (!Regex.IsMatch(email, emailPattern, RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250)))
+                return false;
+
+            // Validación adicional con MailAddress para verificar formato
             var addr = new System.Net.Mail.MailAddress(email);
-            return addr.Address == email;
+            return true;
         }
         catch
         {

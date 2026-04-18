@@ -1,8 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using LuseGestion.API.DTOs;
-using LuseGestion.Application.Services;
 using LuseGestion.Domain.Interfaces;
-using LuseGestion.Domain.Primitives;
+using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace LuseGestion.API.Controllers;
@@ -142,30 +140,30 @@ public class UsuariosController : ControllerBase
         return Ok(usuarioResponse);
     }
 
-    [HttpDelete("{id:int}")]
-    [SwaggerOperation(
-        Summary = "Delete",
-        Description = "Elimina (desactiva) un usuario del sistema",
-        OperationId = "DeleteUsuario",
-        Tags = new[] { "Usuarios" }
-    )]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> DeleteUsuario(int id)
-    {
-        var result = await _usuarioService.DeleteUsuarioAsync(id);
+    //[HttpDelete("{id:int}")]
+    //[SwaggerOperation(
+    //    Summary = "Delete",
+    //    Description = "Elimina (desactiva) un usuario del sistema",
+    //    OperationId = "DeleteUsuario",
+    //    Tags = new[] { "Usuarios" }
+    //)]
+    //[ProducesResponseType(StatusCodes.Status204NoContent)]
+    //[ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[ProducesResponseType(StatusCodes.Status400BadRequest)]
+    //public async Task<IActionResult> DeleteUsuario(int id)
+    //{
+    //    var result = await _usuarioService.DeleteUsuarioAsync(id);
 
-        if (result.IsFailure)
-        {
-            if (result.Error.Contains("no encontrado"))
-                return NotFound(new { error = result.Error });
+    //    if (result.IsFailure)
+    //    {
+    //        if (result.Error.Contains("no encontrado"))
+    //            return NotFound(new { error = result.Error });
 
-            return BadRequest(new { error = result.Error });
-        }
+    //        return BadRequest(new { error = result.Error });
+    //    }
 
-        return NoContent();
-    }
+    //    return NoContent();
+    //}
 
     [HttpPost("authenticate")]
     [SwaggerOperation(
@@ -198,6 +196,7 @@ public class UsuariosController : ControllerBase
     )]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+ 
     public async Task<IActionResult> ChangePassword(int id, [FromBody] ChangePasswordRequest request)
     {
         var result = await _usuarioService.ChangePasswordAsync(id, request.CurrentPassword, request.NewPassword);
@@ -219,6 +218,8 @@ public class UsuariosController : ControllerBase
     )]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    
+    
     public async Task<IActionResult> ActivateUsuario(int id)
     {
         var result = await _usuarioService.ActivateUsuarioAsync(id);

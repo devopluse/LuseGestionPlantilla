@@ -160,7 +160,9 @@ public class UsuarioRepository : IUsuarioRepository
                 UPDATE usuario 
                 SET Nombre = @Nombre, 
                     Telefono = @Telefono, 
-                    IDPerfil = @IDPerfil
+                    IDPerfil = @IDPerfil,
+                    Pass = @Pass,
+                    Activo = @Activo
                 WHERE IDUsuario = @Id";
 
             var affectedRows = await connection.ExecuteAsync(sql, new 
@@ -168,7 +170,9 @@ public class UsuarioRepository : IUsuarioRepository
                 usuario.Nombre,
                 usuario.Telefono,
                 usuario.IDPerfil,
-                usuario.Id 
+                usuario.Id,
+                usuario.Pass,
+                usuario.Activo
             });
 
             return affectedRows > 0 
@@ -186,7 +190,7 @@ public class UsuarioRepository : IUsuarioRepository
         try
         {
             using var connection = _connectionFactory.CreateConnection();
-            const string sql = "UPDATE usuario SET Activo = 0 WHERE IDUsuario = @Id";
+            const string sql = "DELETE usuario WHERE IDUsuario = @Id";
 
             var affectedRows = await connection.ExecuteAsync(sql, new { Id = id });
 
@@ -215,4 +219,5 @@ public class UsuarioRepository : IUsuarioRepository
             return false;
         }
     }
+
 }
